@@ -1,0 +1,38 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "authentication": {
+    "secret": "0bd5fece091e2a654a177db17cf78b9909ea7f182f7556065cac84902c4a45175cad521fb800fc2dd43dfebfb206bc5426565cd53e06f1b347aeef2b2c5a15bba27e308f4fb98b829e9dd4a53d20fde2da524155379104c5cc01a6f162c5793ce0fb6ac3416ae8ee23318c9e9ddb7ebf021510d5fc3116aa07e666cc7c5ace79c943c0b9c0a44c0a36e598290fa0a95656157db4ff81e60fd85dce7c614d072fc6a28a1d95382d8052f368b613d35bd47a314b3e26147ad342dd8b73523f468731f8bf2871dc52d6ee09754168361a956cd35d006ab4c812f6b69840f999a402617f1f2fee3f6e96d11b946b84f5c6ca387904f6b8fdb317356e7019c75090b1",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "type": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "service": "users",
+      "usernameField": "email",
+      "passwordField": "\\password",
+      "idField": "id"
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/grakn-api",
+  "grakn": "http://localhost:4567",
+  "keyspace": "grakn"
+}
