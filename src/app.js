@@ -16,10 +16,12 @@ const services = require('./services');
 const appHooks = require('./app.hooks');
 
 const authentication = require('./authentication');
-
 const mongodb = require('./mongodb');
 
 const app = feathers();
+
+const swagger = require('feathers-swagger');
+const swOptions = require('../swagger/swagger');
 
 // Load app configuration
 app.configure(configuration(path.join(__dirname, '..')));
@@ -38,6 +40,9 @@ app.configure(hooks());
 app.configure(mongodb);
 app.configure(rest());
 app.configure(socketio());
+
+// Configure Swagger
+app.configure(swagger(swOptions));
 
 app.configure(authentication);
 

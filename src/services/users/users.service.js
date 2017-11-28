@@ -4,6 +4,8 @@ const createModel = require('../../models/users.model');
 const hooks = require('./users.hooks');
 const filters = require('./users.filters');
 
+const def = require('../../../swagger/users');
+
 module.exports = function () {
   const app = this;
   const Model = createModel(app);
@@ -16,7 +18,9 @@ module.exports = function () {
   };
 
   // Initialize our service with any options it requires
-  app.use('/users', createService(options));
+  const users = createService(options);
+  users.docs = def;
+  app.use('/users', users);
 
   // Get our initialized service so that we can register hooks and filters
   const service = app.service('users');

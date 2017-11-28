@@ -13,23 +13,6 @@ class Service {
     this.app = app;
   }
 
-  // find (params) {
-    
-  //   return new Promise((resolve, reject) => {
-  //     this.graph.execute(`
-  //       match $p isa person;
-  //       $e isa last-name has value "MemberLName"; 
-  //       $s isa system;
-  //       $a isa attributes; 
-  //       ($p, $e) isa belongs;
-  //       ($p,$a) isa belongs; 
-  //       ($a, $s) isa authorizes; get;
-  //     `).then(res => {
-  //       resolve(JSON.parse(res));
-  //     });
-  //   });
-  // }
-
   get (id, params) {
     return new Promise((resolve, reject) => {
       const _id = parseInt(id);
@@ -83,26 +66,6 @@ class Service {
         resolve(result);
       });
     });
-  }
-
-  create (data, params) {
-    if (Array.isArray(data)) {
-      return Promise.all(data.map(current => this.create(current)));
-    }
-
-    return Promise.resolve(data);
-  }
-
-  update (id, data, params) {
-    return Promise.resolve(data);
-  }
-
-  patch (id, data, params) {
-    return Promise.resolve(data);
-  }
-
-  remove (id, params) {
-    return Promise.resolve({ id });
   }
 }
 

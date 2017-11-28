@@ -2,6 +2,8 @@ const authentication = require('feathers-authentication');
 const jwt = require('feathers-authentication-jwt');
 const local = require('feathers-authentication-local');
 
+const def = require('../swagger/auth');
+
 
 
 module.exports = function () {
@@ -9,7 +11,17 @@ module.exports = function () {
   const config = app.get('authentication');
 
   // Set up authentication with the secret
-  app.configure(authentication(config));
+  // Adding swagger to the authentication
+  app.configure(Object.assign(authentication(config), {
+    docs: def
+  }));
+
+  delete app.docs.paths['/authentication/{id}'];
+  app.docs.paths['/authentication'].post = Object.assign(
+    {}, 
+    app.docs.paths['/authentication'].post, def.post);
+  app.docs.tags[0].description = def.description;
+
   app.configure(jwt());
   app.configure(local(config.local));
 
