@@ -3,6 +3,8 @@ const createService = require('./dashboard.class.js');
 const hooks = require('./dashboard.hooks');
 const filters = require('./dashboard.filters');
 
+const def = require('../../../swagger/dashboard');
+
 module.exports = function () {
   const app = this;
   const paginate = app.get('paginate');
@@ -15,7 +17,9 @@ module.exports = function () {
   };
 
   // Initialize our service with any options it requires
-  app.use('/dashboard', createService(options));
+  app.use('/dashboard', Object.assign(createService(options), {
+    docs: def
+  }));
 
   // Get our initialized service so that we can register hooks and filters
   const service = app.service('dashboard');

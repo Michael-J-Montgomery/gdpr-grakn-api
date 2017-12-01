@@ -36,84 +36,34 @@ module.exports = {
       example: {
         data: [],
         category: [],
-        _sys: {
-          next: 'string',
-          prev: 'string',
-          limit: 'int',
-          skip: 'int',
-          total: 'int',
-          status: 'int'
-        },
-        cache: {
-          cached: 'boolean',
-          duration: 'int',
-          expires_on: 'string',
-          parent: 'string',
-          group: 'string',
-          key: 'string'
-        },
       }   
     }
   },
-  successMyCRM: {
-    description: 'successful operation',
+  successProperties: {
+    description: 'successful opration',
     schema: {
       type: 'object',
       example: {
-        data: [],
-        cache: {
-          cached: 'boolean',
-          duration: 'int',
-          expires_on: 'string',
-          parent: 'string',
-          group: 'string',
-          key: 'string'
-        },
-        status: 'integer'
-      }
-      
-    }
-  },
-  successCalendar: {
-    description: 'successful operation',
-    schema: {
-      type: 'object',
-      example:{
-        data: {
-          '2017': {
-            March: [],
-            '...': []
-          },
-          '2018': {}
-        },
-        _sys: {
-          next: 'string',
-          prev: 'string',
-          limit: 'int',
-          skip: 'int',
-          total: 'int',
-          status: 'int'
+        properties: [
+          {
+            value: 'string',
+            name: 'string',
+            icon: 'string',
+            systems: [
+              {
+                system: 'string',
+                auth: 'string',
+                authId: 'sting (GRAKN System ID)',
+                rel: 'string',
+                relId: 'sting (GRAKN System ID)'
+              }
+            ]
+          }
+        ],
+        person: {
+          id: 'int',
+          gid: 'sting (GRAKN System ID)'
         }
-      }
-    },
-  },
-  successMyCRMOneItem: {
-    description: 'sucessful operation',
-    schema: {
-      type: 'object',
-      example: {
-        data: {},
-        status: 200
-      }
-    }
-  },
-  successMyCRMLogin: {
-    description: 'sucessful operation',
-    schema: {
-      type: 'object',
-      example: {
-        data: {},
-        status: 200
       }
     }
   },

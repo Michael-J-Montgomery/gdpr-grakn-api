@@ -11,24 +11,27 @@ class Service {
 
   setup(app) {
     this.app = app;
-  }
+  } 
+ 
 
   get (id, params) {
     return new Promise((resolve, reject) => {
       const _id = parseInt(id);
-
-      this.graph.execute(`
+      const query = `
         match $person isa person has identifier $id; 
         $id val ${_id};
         $sys isa system has value $name has icon $icon;
         $attr isa attributes has value $value;
         $auth isa authorization has description $description;
         ($person,$attr) isa belongs; 
-        $rel($attr, $auth) isa $type;
+        $rel($attr, $auth);
         ($auth, $sys) isa requires;
         get;
-      `).then(res => {
-        let result = JSON.parse(res).reduce((a, c, i) => {
+      `;
+
+      this.graph.execute(query).then(res => {
+        // parse string then let reduce it
+        let result = JSON.parse(res).reduce((a, c) => {
           if(!a.person && _id === c.id.value) {
             a.person = {
               id: _id,
@@ -38,13 +41,7 @@ class Service {
           if (a.properties.filter(e => e.name === c.attr.isa).length > 0) {
             const index = _.findIndex(a.properties, i => i.name === c.attr.isa);
             if(!a.properties[index].systems.filter(e => e.system === c.name.value).length > 0) {
-              a.properties[index].systems.push({
-                system: c.name.value,
-                auth: c.description.value,
-                authId: c.auth.id,
-                rel: c.rel.isa,
-                relId: c.rel.id
-              });
+              a.properties[index].systems.push(setSystem(c));
             }
             return a;
           }
@@ -52,13 +49,7 @@ class Service {
             value: c.value.value,
             name: c.attr.isa,
             icon: c.icon.value,
-            systems: [{
-              system: c.name.value,
-              auth: c.description.value,
-              authId: c.auth.id,
-              rel: c.rel.isa,
-              relId: c.rel.id
-            }]
+            systems: [setSystem(c)]
           });
           return a;
         }, {properties: []});
@@ -67,6 +58,16 @@ class Service {
       });
     });
   }
+}
+
+function setSystem(obj) {
+  return {
+    system: obj.name.value,
+    auth: obj.description.value,
+    authId: obj.auth.id,
+    rel: obj.rel.isa,
+    relId: obj.rel.id
+  };
 }
 
 module.exports = function (options) {

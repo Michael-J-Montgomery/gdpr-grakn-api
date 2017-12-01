@@ -21,7 +21,7 @@ module.exports = {
     required: true,
     type: 'integer',
     allowMultiple: false,
-    in: 'query'
+    in: 'path'
   },
   contactId: {
     name: 'contactid',

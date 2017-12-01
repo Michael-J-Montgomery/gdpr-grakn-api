@@ -29,11 +29,13 @@ class Service {
           insert (demand:$a, needed:$b) isa needs;
         `;
       }
+
+      const delQuery = `
+      match $rel id ${data.relId}; 
+      delete $rel;`;
   
       this.graph.execute(query).then( res => {
-        this.graph.execute(`
-          match $rel id ${data.relId}; 
-          delete $rel;`)
+        this.graph.execute(delQuery)
           .then(res => {
             resolve(res);
           })

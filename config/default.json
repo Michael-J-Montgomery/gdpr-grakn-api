@@ -29,7 +29,7 @@
       "service": "users",
       "usernameField": "email",
       "passwordField": "\\password",
-      "idField": "id"
+      "idField": "_id"
     }
   },
   "mongodb": "mongodb://localhost:27017/grakn-api",
