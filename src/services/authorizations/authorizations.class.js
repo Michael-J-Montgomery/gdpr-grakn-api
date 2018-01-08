@@ -1,3 +1,4 @@
+const errors = require('feathers-errors');
 const GraknGraph = require('grakn');
 
 /* eslint-disable no-unused-vars */
@@ -5,6 +6,83 @@ class Service {
   constructor (options) {
     this.options = options || {};
     this.graph =  new GraknGraph(options.grakn, options.keyspace);
+  }
+
+  create (data, params) {
+    return new Promise((resolve, reject) => { 
+      if(Object.keys(data).length !== 2) {
+        reject(new errors.BadRequest('Invalid object', data));
+      }
+
+      let properties = [];
+      let auth = [];
+      let insert = [];
+
+      data.authorizations.map((c, i) => {
+        const a = `$a${i}`;
+        auth.push(a + ` isa authorization, has name "${c.name}"; `);
+        c.properties.map(c => {
+          const prop = `$p${i + c}`;
+          properties.push(`${prop} isa ${c}; ($p, ${prop}) isa belongs; `);
+          insert.push(`(demand: ${prop}, needed: ${a}) isa needs; `);
+        });
+      });
+
+
+      const query = `
+      match $p isa person, has identifier ${data.personId}; 
+        ${auth.join('')}
+        ${properties.join('')}
+      insert 
+        ${insert.join('')}
+      `;
+
+      this.graph.execute(query).then( res => {
+        resolve({
+          status: 200,
+          message: 'Authorizations have been inserted',
+          data: JSON.parse(res)
+        });
+      }).catch(err => {
+        reject(err.message);
+      });
+    });
+  }
+
+  get (sys, params) {
+    return new Promise((resolve, reject) => {
+      const query = `
+        match
+          $a isa system, has value "${sys}";
+          ($a, $b) isa requires;
+          $b isa authorization has description $description, has name $name;
+          ($b, $c) isa needs; 
+        get $description, $name, $c;
+      `;
+      this.graph.execute(query)
+        .then( res => {
+          const result = JSON.parse(res)
+            .reduce((a, c) => {
+              if(!a[c.name.value]) {
+                a[c.name.value] = {
+                  properties: [{property:c.c.type.label, description: c.description.value}]
+                };
+              }
+
+              if(!a[c.name.value].properties.filter(e => e.property === c.c.type.label).length > 0) {
+                a[c.name.value].properties.push({
+                  property:c.c.type.label, 
+                  description: c.description.value
+                });
+              }
+              return a;
+            }, {});
+          resolve(result);
+        })
+        .catch(err => {
+          reject(err.message);
+        });
+    });
   }
 
   update (id, data, params) {

@@ -16,8 +16,9 @@
     "lib": "src"
   },
   "engines": {
-    "node": ">= 6.0.0",
-    "npm": ">= 3.0.0"
+    "grakn": ">= 1.0.0",
+    "node": ">= 8.0.0",
+    "npm": ">= 5.0.0"
   },
   "scripts": {
     "test": "npm run eslint && npm run mocha",
@@ -43,17 +44,17 @@
     "feathers-rest": "^1.8.1",
     "feathers-socketio": "^2.0.1",
     "feathers-swagger": "^0.5.0",
-    "grakn": "0.0.7",
+    "grakn": "0.1.0",
     "helmet": "^3.9.0",
     "loadash": "^1.0.0",
     "mongodb": "^2.2.33",
-    "mongoose": "^4.13.2",
+    "mongoose": "^4.13.7",
     "serve-favicon": "^2.4.5",
-    "validator": "^9.1.1",
+    "validator": "^9.2.0",
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "eslint": "^4.11.0",
+    "eslint": "^4.13.1",
     "mocha": "^4.0.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"

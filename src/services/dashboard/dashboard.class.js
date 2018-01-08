@@ -12,7 +12,6 @@ class Service {
   setup(app) {
     this.app = app;
   } 
- 
 
   get (id, params) {
     return new Promise((resolve, reject) => {
@@ -21,7 +20,7 @@ class Service {
         match $person isa person has identifier $id; 
         $id val ${_id};
         $sys isa system has value $name has icon $icon;
-        $attr isa attributes has value $value;
+        $attr isa property has value $value;
         $auth isa authorization has description $description;
         ($person,$attr) isa belongs; 
         $rel($attr, $auth);
@@ -31,15 +30,17 @@ class Service {
 
       this.graph.execute(query).then(res => {
         // parse string then let reduce it
+        // resolve(JSON.parse(res))
+        // console.log(JSON.parse(res))
         let result = JSON.parse(res).reduce((a, c) => {
-          if(!a.person && _id === c.id.value) {
+          if(!a.person && _id === parseInt(c.id.value)) {
             a.person = {
               id: _id,
               gid: c.person.id
             };
           }
-          if (a.properties.filter(e => e.name === c.attr.isa).length > 0) {
-            const index = _.findIndex(a.properties, i => i.name === c.attr.isa);
+          if (a.properties.filter(e => e.name === c.attr.type.label).length > 0) {
+            const index = _.findIndex(a.properties, i => i.name === c.attr.type.label);
             if(!a.properties[index].systems.filter(e => e.system === c.name.value).length > 0) {
               a.properties[index].systems.push(setSystem(c));
             }
@@ -47,7 +48,7 @@ class Service {
           }
           a.properties.push({
             value: c.value.value,
-            name: c.attr.isa,
+            name: c.attr.type.label,
             icon: c.icon.value,
             systems: [setSystem(c)]
           });
@@ -65,7 +66,7 @@ function setSystem(obj) {
     system: obj.name.value,
     auth: obj.description.value,
     authId: obj.auth.id,
-    rel: obj.rel.isa,
+    rel: obj.rel.type.label,
     relId: obj.rel.id
   };
 }
