@@ -29,9 +29,6 @@ class Service {
       `;
 
       this.graph.execute(query).then(res => {
-        // parse string then let reduce it
-        // resolve(JSON.parse(res))
-        // console.log(JSON.parse(res))
         let result = JSON.parse(res).reduce((a, c) => {
           if(!a.person && _id === parseInt(c.id.value)) {
             a.person = {

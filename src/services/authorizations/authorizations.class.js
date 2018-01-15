@@ -56,7 +56,8 @@ class Service {
           $a isa system, has value "${sys}";
           ($a, $b) isa requires;
           $b isa authorization has description $description, has name $name;
-          ($b, $c) isa needs; 
+          ($b, $c);
+          $c isa property; 
         get $description, $name, $c;
       `;
       this.graph.execute(query)
@@ -65,7 +66,9 @@ class Service {
             .reduce((a, c) => {
               if(!a[c.name.value]) {
                 a[c.name.value] = {
-                  properties: [{property:c.c.type.label, description: c.description.value}]
+                  properties: [{
+                    property:c.c.type.label, 
+                    description: c.description.value}]
                 };
               }
 
