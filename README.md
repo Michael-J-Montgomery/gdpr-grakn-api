@@ -1,5 +1,7 @@
 # api
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/idealley/gdpr-grakn-api.svg)](https://greenkeeper.io/)
+
 > GRAKN API
 
 ## About
